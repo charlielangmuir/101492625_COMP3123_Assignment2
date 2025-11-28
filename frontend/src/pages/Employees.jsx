@@ -19,9 +19,9 @@ export default function Employees() {
       let query = "";
       if (search.department || search.position) {
         const params = new URLSearchParams(search);
-        query = `/employees/search?${params.toString()}`;
+        query = `/emp/employees/search?${params.toString()}`;
       }
-      const res = await axiosClient.get(query || "/employees");
+      const res = await axiosClient.get(query || "/emp/employees");
       setEmployees(res.data);
       setLoading(false);
     } catch (err) {
@@ -46,7 +46,7 @@ export default function Employees() {
     const handleDelete = async(id) => {
         if (!window.confirm("Are you sure you want to delete this employee?")) return;
         try {
-            await axiosClient.delete(`/employees/${id}`);
+            await axiosClient.delete(`/emp/employees/${id}`);
             setEmployees(employees.filter(emp => emp._id != id));
         } catch (err) {
             console.error(err);

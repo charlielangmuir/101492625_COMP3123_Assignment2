@@ -15,7 +15,7 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await axiosClient.post("/login", { email, password });
+      const response = await axiosClient.post("/user/login", { email, password });
       localStorage.setItem("token", response.data.token);
       navigate("/employees");
     } catch (err) {

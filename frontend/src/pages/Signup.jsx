@@ -18,7 +18,7 @@ export default function Signup() {
     setSuccess("");
 
     try {
-      await axiosClient.post("/signup", { name, email, password });
+      await axiosClient.post("/user/signup", { username, email, password });
       setSuccess("Signup successful! You can now login.");
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
@@ -39,7 +39,7 @@ export default function Signup() {
           className="input"
           type="text"
           placeholder="Enter your name"
-          value={name}
+          value={username}
           onChange={(e) => setName(e.target.value)}
           required
         />

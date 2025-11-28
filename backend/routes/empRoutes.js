@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const empController = require("../controllers/empController");
 
+router.get("/employees/search", empController.searchEmployees)
 // Get all employees
 router.get("/employees", empController.getAllEmployees);
 
