@@ -1,0 +1,35 @@
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axiosClient from "../axiosClient";
+
+export default function EmployeeDetails() {
+  const { eid } = useParams();
+  const navigate = useNavigate();
+  const [employee, setEmployee] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    axiosClient.get(`/emp/employees/${eid}`)
+      .then(res => setEmployee(res.data))
+      .catch(err => {
+        console.error(err);
+        setError("Failed to fetch employee details.");
+      });
+  }, [eid]);
+
+  if (error) return <p className="error">{error}</p>;
+  if (!employee) return <p>Loading...</p>;
+
+  return (
+    <div className="details-container">
+      <h2>{employee.first_name} {employee.last_name}</h2>
+      <p><strong>Email:</strong> {employee.email}</p>
+      <p><strong>Position:</strong> {employee.position}</p>
+      <p><strong>Salary:</strong> ${employee.salary}</p>
+      <p><strong>Date of Joining:</strong> {new Date(employee.date_of_joining).toLocaleDateString()}</p>
+      <p><strong>Department:</strong> {employee.department}</p>
+      <button className="button" style={{ backgroundColor: "gray" }} onClick={() => navigate("/employees")}>Back</button>
+      <button className="button" style={{ backgroundColor: "orange" }} onClick={() => navigate(`/employees/edit/${eid}`)}>Edit</button>
+    </div>
+  );
+}
