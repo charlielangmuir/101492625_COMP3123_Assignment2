@@ -13,6 +13,7 @@ export default function EditEmployee() {
     salary: "",
     date_of_joining: "",
     department: "",
+    profilePic: null
   });
   const [error, setError] = useState("");
 
@@ -28,17 +29,35 @@ export default function EditEmployee() {
   const handleChange = (e) => {
     setEmployee({ ...employee, [e.target.name]: e.target.value });
   };
+  const handleFileChange = (e) => {
+    setEmployee({ ...employee, profilePic: e.target.files[0] });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axiosClient.put(`/emp/employees/${eid}`, employee);
-      navigate("/employees");
-    } catch (err) {
-      console.error(err);
-      setError("Failed to update employee.");
-    }
-  };
+  e.preventDefault();
+  try {
+    const formData = new FormData();
+
+    Object.keys(employee).forEach(key => {
+      if (key === "profilePic") {
+        if (employee.profilePic instanceof File) {
+          formData.append("profilePic", employee.profilePic);
+        }
+      } else {
+        formData.append(key, employee[key]);
+      }
+    });
+
+    await axiosClient.put(`/emp/employees/${eid}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    navigate("/employees");
+  } catch (err) {
+    console.error(err);
+    setError("Failed to edit employee.");
+  }
+};
 
   return (
     <div className="form-container">
@@ -52,6 +71,7 @@ export default function EditEmployee() {
         <input type="number" name="salary" placeholder="Salary" value={employee.salary} onChange={handleChange} required />
         <input type="date" name="date_of_joining" placeholder="Date of Joining" value={employee.date_of_joining} onChange={handleChange} required />
         <input type="text" name="department" placeholder="Department" value={employee.department} onChange={handleChange} required />
+        <input type="file" name="profilePic" onChange={handleFileChange} />
         <button className="button" style={{ backgroundColor: "orange" }}>Update Employee</button>
       </form>
     </div>

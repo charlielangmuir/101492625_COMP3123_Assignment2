@@ -52,12 +52,27 @@ exports.getAllEmployees = async (req, res) => {
 exports.createEmployee = async (req, res) => {
   try {
     console.log("[EMP CONTROLLER] createEmployee called");
-    const emp = new Employee(req.body);
+
+    const empData = { ...req.body };
+    if (req.file) {
+      empData.profilePic = req.file.path;
+    }
+
+    const emp = new Employee(empData);
     await emp.save();
-    res.status(201).json({ status: true, message: "Employee created", employee_id: emp._id.toString() });
+
+    res.status(201).json({
+      status: true,
+      message: "Employee created",
+      employee_id: emp._id.toString(),
+    });
   } catch (err) {
     console.error("[EMP CONTROLLER] createEmployee error:", err);
-    res.status(400).json({ status: false, message: "Error creating employee", error: err.message });
+    res.status(400).json({
+      status: false,
+      message: "Error creating employee",
+      error: err.message,
+    });
   }
 };
 
@@ -86,13 +101,21 @@ exports.getEmployeeById = async (req, res) => {
 exports.updateEmployee = async (req, res) => {
   try {
     console.log(`[EMP CONTROLLER] updateEmployee called: ${req.params.eid}`);
-    const emp = await Employee.findByIdAndUpdate(req.params.eid, req.body, { new: true });
-    if (!emp) return res.status(404).json({ status: false, message: "Employee not found" });
-
+    const empData = { ...req.body };
+    if (req.file) {
+      empData.profilePic = req.file.path;
+    }
+    const emp = await Employee.findByIdAndUpdate(req.params.eid, empData, { new: true });
+    if (!emp)
+      return res.status(404).json({ status: false, message: "Employee not found" });
     res.status(200).json({ status: true, message: "Employee updated", employee: emp });
   } catch (err) {
     console.error("[EMP CONTROLLER] updateEmployee error:", err);
-    res.status(500).json({ status: false, message: "Internal server error", error: err.message });
+    res.status(500).json({
+      status: false,
+      message: "Internal server error",
+      error: err.message,
+    });
   }
 };
 

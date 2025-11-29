@@ -58,7 +58,7 @@ export default function Employees() {
     if (error) return <p className="page-container">{error}</p>;
 
     return (
-        <div calssName="page-container">
+        <div className="page-container">
             <h1>Employees</h1>
 
             <form onSubmit={handleSearchSubmit} style ={{marginBottom:"1rem"}}>

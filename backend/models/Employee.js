@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const EmployeeSchema = new mongoose.Schema({
+    profilePic: { type: String },
     first_name: { type: String, required: true, unique: true },
     last_name: { type: String, required: true, unique: true },
     position: { type: String, required: true},

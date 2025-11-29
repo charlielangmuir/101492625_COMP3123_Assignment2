@@ -23,6 +23,9 @@ export default function EmployeeDetails() {
   return (
     <div className="details-container">
       <h2>{employee.first_name} {employee.last_name}</h2>
+      {employee.profilePic && (
+      <img src={`http://localhost:5000/${employee.profilePic}`} alt="Profile" width={50} />
+      )}
       <p><strong>Email:</strong> {employee.email}</p>
       <p><strong>Position:</strong> {employee.position}</p>
       <p><strong>Salary:</strong> ${employee.salary}</p>

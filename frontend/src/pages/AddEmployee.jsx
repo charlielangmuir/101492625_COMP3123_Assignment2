@@ -12,6 +12,7 @@ export default function AddEmployee() {
     salary: "",
     date_of_joining: "",
     department: "",
+    profilePic: null
   });
   const [error, setError] = useState("");
 
@@ -22,12 +23,23 @@ export default function AddEmployee() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axiosClient.post("/emp/employees", employee);
-      navigate("/employees"); // redirect to employee list
+        const formData = new FormData();
+        Object.keys(employee).forEach(key => {
+        if (employee[key] !== "" && employee[key] !== null) {
+            formData.append(key, employee[key]);
+        }
+        });
+        await axiosClient.post("/emp/employees", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        });
+      navigate("/employees");
     } catch (err) {
       console.error(err);
       setError("Failed to add employee.");
     }
+  };
+  const handleFileChange = (e) => {
+    setEmployee({ ...employee, profilePic: e.target.files[0] });
   };
 
   return (
@@ -42,6 +54,7 @@ export default function AddEmployee() {
         <input type="number" name="salary" placeholder="Salary" value={employee.salary} onChange={handleChange} required />
         <input type="date" name="date_of_joining" placeholder="Date of Joining" value={employee.date_of_joining} onChange={handleChange} required />
         <input type="text" name="department" placeholder="Department" value={employee.department} onChange={handleChange} required />
+        <input type="file" name="profilePic" onChange={handleFileChange} />
         <button className="button" style={{ backgroundColor: "green" }}>Add Employee</button>
       </form>
     </div>
