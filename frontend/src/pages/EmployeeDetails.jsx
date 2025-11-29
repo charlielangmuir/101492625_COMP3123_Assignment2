@@ -22,17 +22,19 @@ export default function EmployeeDetails() {
   return (
     <div className="details-container">
       <h2>{employee.first_name} {employee.last_name}</h2>
-      <p>location: {employee.profilePic}</p>
       {employee.profilePic && ( 
-      <img src={`http://localhost:5000${new String(employee.profilePic).replace(/^\/app/, '')}`} alt="Profile" width={50} />
+      <img className="pfp" src={`http://localhost:5000${new String(employee.profilePic).replace(/^\/app/, '')}`} alt="Profile" width={50} />
       )}
       <p><strong>Email:</strong> {employee.email}</p>
       <p><strong>Position:</strong> {employee.position}</p>
       <p><strong>Salary:</strong> ${employee.salary}</p>
       <p><strong>Date of Joining:</strong> {new Date(employee.date_of_joining).toLocaleDateString()}</p>
       <p><strong>Department:</strong> {employee.department}</p>
-      <button className="button" style={{ backgroundColor: "gray" }} onClick={() => navigate("/employees")}>Back</button>
-      <button className="button" style={{ backgroundColor: "orange" }} onClick={() => navigate(`/employees/${eid}/edit`)}>Edit</button>
+      <div className="button-box">
+        <button className="button" style={{ backgroundColor: "gray", width: "65px" }} onClick={() => navigate("/employees")}>Back</button>
+        <button className="button" style={{ backgroundColor: "orange", width: "65px" }} onClick={() => navigate(`/employees/${eid}/edit`)}>Edit</button>
+      </div>
+      
     </div>
   );
 }
