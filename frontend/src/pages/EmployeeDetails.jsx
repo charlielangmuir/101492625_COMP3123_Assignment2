@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axiosClient from "../axiosClient";
+import axiosClient from "../api/axiosClient";
 
 export default function EmployeeDetails() {
   const { eid } = useParams();
@@ -16,15 +16,15 @@ export default function EmployeeDetails() {
         setError("Failed to fetch employee details.");
       });
   }, [eid]);
-
   if (error) return <p className="error">{error}</p>;
   if (!employee) return <p>Loading...</p>;
-
+  console.log(employee);
   return (
     <div className="details-container">
       <h2>{employee.first_name} {employee.last_name}</h2>
-      {employee.profilePic && (
-      <img src={`http://localhost:5000/${employee.profilePic}`} alt="Profile" width={50} />
+      <p>location: {employee.profilePic}</p>
+      {employee.profilePic && ( 
+      <img src={`http://localhost:5000${new String(employee.profilePic).replace(/^\/app/, '')}`} alt="Profile" width={50} />
       )}
       <p><strong>Email:</strong> {employee.email}</p>
       <p><strong>Position:</strong> {employee.position}</p>
@@ -32,7 +32,7 @@ export default function EmployeeDetails() {
       <p><strong>Date of Joining:</strong> {new Date(employee.date_of_joining).toLocaleDateString()}</p>
       <p><strong>Department:</strong> {employee.department}</p>
       <button className="button" style={{ backgroundColor: "gray" }} onClick={() => navigate("/employees")}>Back</button>
-      <button className="button" style={{ backgroundColor: "orange" }} onClick={() => navigate(`/employees/edit/${eid}`)}>Edit</button>
+      <button className="button" style={{ backgroundColor: "orange" }} onClick={() => navigate(`/employees/${eid}/edit`)}>Edit</button>
     </div>
   );
 }

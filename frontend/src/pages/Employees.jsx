@@ -48,6 +48,7 @@ export default function Employees() {
         try {
             await axiosClient.delete(`/emp/employees/${id}`);
             setEmployees(employees.filter(emp => emp._id != id));
+            fetchEmployees();
         } catch (err) {
             console.error(err);
             alert("Failed to delete employee.")
@@ -120,8 +121,8 @@ export default function Employees() {
                     </tr>
                 ) : (
                     employees.map((emp) => (
-                    <tr key={emp._id}>
-                        <td>{emp.name}</td>
+                    <tr key={emp.employee_id}>
+                        <td>{emp.first_name} {emp.last_name}</td>
                         <td>{emp.email}</td>
                         <td>{emp.department}</td>
                         <td>{emp.position}</td>
@@ -129,21 +130,21 @@ export default function Employees() {
                         <button
                             className="button"
                             style={{ backgroundColor: "blue", marginRight: "0.25rem" }}
-                            onClick={() => navigate(`/employees/${emp._id}/edit`)}
+                            onClick={() => navigate(`/employees/${emp.employee_id}/edit`)}
                         >
                             Edit
                         </button>
                         <button
                             className="button"
                             style={{ backgroundColor: "red", marginRight: "0.25rem" }}
-                            onClick={() => handleDelete(emp._id)}
+                            onClick={() => handleDelete(emp.employee_id)}
                         >
                             Delete
                         </button>
                         <button
                             className="button"
                             style={{ backgroundColor: "gray" }}
-                            onClick={() => navigate(`/employees/${emp._id}`)}
+                            onClick={() => navigate(`/employees/${emp.employee_id}`)}
                         >
                             View
                         </button>

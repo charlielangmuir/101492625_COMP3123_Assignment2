@@ -6,7 +6,7 @@ import "./App.css";
 export default function Signup() {
   const navigate = useNavigate();
 
-  const [name, setName] = useState("");
+  const [username, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

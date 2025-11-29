@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosClient from "../axiosClient";
+import axiosClient from "../api/axiosClient";
 
 export default function AddEmployee() {
   const navigate = useNavigate();
@@ -21,23 +21,31 @@ export default function AddEmployee() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-        const formData = new FormData();
-        Object.keys(employee).forEach(key => {
-        if (employee[key] !== "" && employee[key] !== null) {
-            formData.append(key, employee[key]);
+  e.preventDefault();
+  try {
+    const formData = new FormData();
+
+    Object.keys(employee).forEach(key => {
+      if (key === "profilePic") {
+        if (employee.profilePic instanceof File) {
+          formData.append("profilePic", employee.profilePic);
         }
-        });
-        await axiosClient.post("/emp/employees", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        });
-      navigate("/employees");
-    } catch (err) {
-      console.error(err);
-      setError("Failed to add employee.");
-    }
-  };
+      } else {
+        formData.append(key, employee[key]);
+      }
+    });
+
+    await axiosClient.post("/emp/employees", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    navigate("/employees");
+  } catch (err) {
+    console.error(err);
+    setError("Failed to add employee.");
+  }
+};
+
   const handleFileChange = (e) => {
     setEmployee({ ...employee, profilePic: e.target.files[0] });
   };

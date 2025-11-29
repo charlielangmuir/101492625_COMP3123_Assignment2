@@ -91,6 +91,7 @@ exports.getEmployeeById = async (req, res) => {
       salary: emp.salary,
       date_of_joining: emp.date_of_joining,
       department: emp.department,
+      profilePic: emp.profilePic,
     });
   } catch (err) {
     console.error("[EMP CONTROLLER] getEmployeeById error:", err);
@@ -103,6 +104,7 @@ exports.updateEmployee = async (req, res) => {
     console.log(`[EMP CONTROLLER] updateEmployee called: ${req.params.eid}`);
     const empData = { ...req.body };
     if (req.file) {
+      console.log(req.file);
       empData.profilePic = req.file.path;
     }
     const emp = await Employee.findByIdAndUpdate(req.params.eid, empData, { new: true });
